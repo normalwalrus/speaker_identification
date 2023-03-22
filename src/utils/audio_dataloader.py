@@ -6,12 +6,12 @@ import librosa
 import librosa.display
 import random
 import matplotlib.pyplot as plt
+from logzero import logger
 
 class dataLoader_extraction:
 
-    def __init__(self, path, normalize = True):
-        self.path = path
-        self.y = torchaudio.load(path, normalize = normalize)
+    def __init__(self, audio):
+        self.y = audio
         self.sr = self.y[1]
         self.ynumpy = (self.y[0][0]).numpy()
 
