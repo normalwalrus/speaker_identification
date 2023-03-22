@@ -2,7 +2,7 @@ import gradio as gr
 from utils.testing import tester
 from typing import Any, List, Optional, Union
 
-inputs = gr.Audio(source='upload', type='filepath')
+inputs = [gr.Audio(source='upload', type='filepath'), gr.CheckboxGroup(choices= ['ECAPA_TDNN', 'CNN'])]
 # inputs: Union[str, gr.inputs.Audio] = gr.inputs.Audio(source='upload', type='filepath')
 outputs = ['text']
 

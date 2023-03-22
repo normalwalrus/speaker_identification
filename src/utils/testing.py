@@ -6,6 +6,7 @@ import numpy as np
 from logzero import logger
 from collections import Counter
 import operator
+from logzero import logger
 
 class tester:
 
@@ -41,9 +42,11 @@ class tester:
         return predicted
 
     
-    def predict(self, audio_path, audio_length = 5000):
+    def predict(self, audio_path, models = [], audio_length = 5000):
 
         #y = torchaudio.load(audio_path, normalize = True)
+
+        logger.info(models)
 
         sp = splitter()
         split = sp.split_audio_tensor(audio_path)
