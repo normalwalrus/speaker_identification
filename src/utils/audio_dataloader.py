@@ -7,11 +7,10 @@ import librosa.display
 import random
 import matplotlib.pyplot as plt
 
-class dataLoader_extraction():
+class dataLoader_extraction:
 
     def __init__(self, path, normalize = True):
         self.path = path
-        #self.y = np.array(librosa.load(path, mono = True, sr = self.sr))
         self.y = torchaudio.load(path, normalize = normalize)
         self.sr = self.y[1]
         self.ynumpy = (self.y[0][0]).numpy()
