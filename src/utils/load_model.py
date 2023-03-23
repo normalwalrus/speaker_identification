@@ -4,6 +4,7 @@ import torchaudio
 from dotenv import load_dotenv
 from utils.models.ECAPA_TDNN import ECAPA_TDNN
 from utils.models.neural_net import FeedForwardNN, ConvNN
+from utils.models.ResNet import ResBottleneckBlock, ResNet, ResBlock
 from utils.audio_dataloader import dataLoader_extraction
 from utils.models.encoder import Encoder
 import numpy as np
@@ -40,6 +41,10 @@ class model_loader:
             case 'Audio':
                 logger.info('Audio Extraction...')
                 features = DL.y[0]
+            case 'Spectrogram':
+                logger.info('Spectrogram Extraction...')
+                features = DL.spectro_gram()
+                features = np.array([features])
 
         if classifier:
             logger.info('Encoding using Pretrained ECAPA_TDNN...')
@@ -84,6 +89,25 @@ class model_loader:
                 bundle = torchaudio.pipelines.WAV2VEC2_ASR_BASE_960H
                 Wav2Vec2 = bundle.get_model()
 
+            case 'CNN':
+                save_path = os.getcwd() + os.environ.get('PATH_TO_CNN')
+                datatype = 'Spectrogram'
+                model = ConvNN(len(labels))
+
+            case 'ResNet34':
+                save_path = os.getcwd() + os.environ.get('PATH_TO_ResNet34')
+                datatype = 'Spectrogram'
+                model = ResNet(1, ResBlock, [3, 4, 6, 3], useBottleneck=False, outputs=len(labels))
+
+            case 'ResNet50':
+                save_path = os.getcwd() + os.environ.get('PATH_TO_ResNet50')
+                datatype = 'Spectrogram'
+                model = ResNet(1, ResBottleneckBlock, [3, 4, 6, 3], useBottleneck=True, outputs=len(labels))
+
+            case 'ResNet101':
+                save_path = os.getcwd() + os.environ.get('PATH_TO_ResNet101')
+                datatype = 'Spectrogram'
+                model = ResNet(1, ResBottleneckBlock, [3, 4, 23, 3], useBottleneck=True, outputs=len(labels))
 
         model.load_state_dict(torch.load(save_path))
         model.eval().double()

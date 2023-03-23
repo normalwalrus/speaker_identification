@@ -3,7 +3,7 @@ from utils.testing import tester
 from typing import Any, List, Optional, Union
 import utils.messages as messages
 
-MODELS = ['ECAPA_TDNN', 'ECAPA_TDNN_pretrained', 'Wav2Vec2_Embedding', 'CNN']
+MODELS = ['ECAPA_TDNN', 'ECAPA_TDNN_pretrained', 'Wav2Vec2_Embedding', 'CNN', 'ResNet34', 'ResNet50', 'ResNet101']
 
 inputs = [gr.Audio(source='upload', type='filepath'), gr.CheckboxGroup(choices= MODELS)]
 outputs = ['text']
