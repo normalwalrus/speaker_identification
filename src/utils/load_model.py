@@ -22,7 +22,7 @@ load_dotenv()
 class model_loader:
 
     def __init__(self, device) -> None:
-        self.device = device
+        self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
     def load_features(self, audio, audio_length, params):
 

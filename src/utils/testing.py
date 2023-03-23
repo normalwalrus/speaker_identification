@@ -15,6 +15,7 @@ class tester:
     def __init__(self):
 
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+        #self.device = torch.device('cpu')
     
     def final_string_construction(self, predicted_list, expected):
 
