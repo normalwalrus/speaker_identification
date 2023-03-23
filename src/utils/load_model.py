@@ -1,12 +1,14 @@
 import os
 import torch
 import torchaudio
+import pickle
 from dotenv import load_dotenv
 from utils.models.ECAPA_TDNN import ECAPA_TDNN
 from utils.models.neural_net import FeedForwardNN, ConvNN
 from utils.models.ResNet import ResBottleneckBlock, ResNet, ResBlock
 from utils.audio_dataloader import dataLoader_extraction
 from utils.models.encoder import Encoder
+from utils.models.xvector import xvecTDNN, xvecExtraction
 import numpy as np
 from logzero import logger
 
@@ -24,7 +26,7 @@ class model_loader:
 
     def load_features(self, audio, audio_length, params):
 
-        datatype, classifier, Wav2Vec2 = params
+        datatype, classifier, Wav2Vec2, _ = params
 
         DL = dataLoader_extraction(audio)
 
@@ -66,6 +68,7 @@ class model_loader:
         no_speakers = len(labels)
         classifier = None
         Wav2Vec2 = None
+        plda_model = None
 
         match model:
 
@@ -108,8 +111,20 @@ class model_loader:
                 save_path = os.getcwd() + os.environ.get('PATH_TO_ResNet101')
                 datatype = 'Spectrogram'
                 model = ResNet(1, ResBottleneckBlock, [3, 4, 23, 3], useBottleneck=True, outputs=len(labels))
+            
+            case 'XvecTDNN':
+                save_path = os.getcwd() + os.environ.get('PATH_TO_XvecTDNN')
+                datatype = 'MFCC'
+                model = xvecTDNN(len(labels), 0.25, 157)
+
+            case 'XvecPLDA':
+                save_path = os.getcwd() + os.environ.get('PATH_TO_XvecPLDA')
+                datatype = 'MFCC'
+                model = xvecExtraction(len(labels), 0.5, 157)
+                plda_model = pickle.load(open(os.getcwd() + os.environ.get('PATH_TO_PLDA'),"rb"))
+
 
         model.load_state_dict(torch.load(save_path))
         model.eval().double()
 
-        return model, datatype, classifier, Wav2Vec2
+        return model, datatype, classifier, Wav2Vec2, plda_model

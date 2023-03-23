@@ -118,6 +118,7 @@ lightning-utilities==0.7.1
 linkify-it-py==2.0.0
 llvmlite==0.39.1
 loguru==0.6.0
+logzero==1.7.0
 louis==3.20.0
 macaroonbakery==1.3.1
 Mako==1.2.4
@@ -162,6 +163,7 @@ pickleshare==0.7.5
 Pillow==9.0.1
 plac==1.3.5
 platformdirs==3.0.0
+plda @ https://github.com/RaviSoji/plda/tarball/master
 pooch==1.7.0
 pop-transition==1.1.2
 primePy==1.3

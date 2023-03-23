@@ -40,22 +40,29 @@ class tester:
 
         logger.info(final_string)
 
-        return final_string
+        return final_string, predicted_politician
     
     def predict_one_portion(self, audio, params, audio_length = 5000):
 
-        model, datatype, classifier, Wav2Vec2 = params
+        model, datatype, classifier, Wav2Vec2, plda = params
         ML = model_loader(self.device)
         
         logger.info('Feature extraction starting...')
-        features = ML.load_features(audio, audio_length, [datatype, classifier, Wav2Vec2])
+        features = ML.load_features(audio, audio_length, [datatype, classifier, Wav2Vec2, plda])
 
         logger.info('Feature consversion to tensor...')
         features = torch.from_numpy(features).type(torch.double).to(self.device)
 
         logger.info('Model inference starting...')
         model = model.to(self.device)
-        predicted = torch.argmax(model(features))
+
+        predicted = model(features)
+
+        if plda:
+            predicted, _ = plda.predict(predicted.cpu().detach().numpy())
+            predicted = torch.from_numpy(np.array(predicted))
+
+        predicted = torch.argmax(predicted)
 
         predicted = LABELS[predicted]
 
@@ -86,6 +93,6 @@ class tester:
                 predicted = self.predict_one_portion(i, params, audio_length)
                 predicted_list.append(predicted)
 
-        final_string = self.final_string_construction(predicted_list, expected)
+        final_string, predicted_politician = self.final_string_construction(predicted_list, expected)
 
-        return final_string
+        return final_string, predicted_politician

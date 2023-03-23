@@ -3,10 +3,11 @@ from utils.testing import tester
 from typing import Any, List, Optional, Union
 import utils.messages as messages
 
-MODELS = ['ECAPA_TDNN', 'ECAPA_TDNN_pretrained', 'Wav2Vec2_Embedding', 'CNN', 'ResNet34', 'ResNet50', 'ResNet101']
+MODELS = ['ECAPA_TDNN', 'ECAPA_TDNN_pretrained', 'Wav2Vec2_Embedding', 'CNN', 
+          'ResNet34', 'ResNet50', 'ResNet101', 'XvecTDNN', 'XvecPLDA']
 
 inputs = [gr.Textbox(), gr.Audio(source='upload', type='filepath'), gr.CheckboxGroup(choices= MODELS)]
-outputs = ['text']
+outputs = ['text', gr.Image()]
 
 if __name__ == "__main__":
 
