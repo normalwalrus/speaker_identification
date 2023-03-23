@@ -24,6 +24,6 @@ if __name__ == "__main__":
         title=messages.title,
         description=messages.desciption,
         examples=AUDIO_LIST
-    ).launch()
+    ).launch(server_name="0.0.0.0")
     
     

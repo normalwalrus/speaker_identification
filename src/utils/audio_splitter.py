@@ -1,6 +1,5 @@
 import numpy as np
 import librosa
-import torchaudio
 import torch
 from logzero import logger
 
