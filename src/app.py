@@ -5,7 +5,7 @@ import utils.messages as messages
 
 MODELS = ['ECAPA_TDNN', 'ECAPA_TDNN_pretrained', 'Wav2Vec2_Embedding', 'CNN', 'ResNet34', 'ResNet50', 'ResNet101']
 
-inputs = [gr.Audio(source='upload', type='filepath'), gr.CheckboxGroup(choices= MODELS)]
+inputs = [gr.Textbox(), gr.Audio(source='upload', type='filepath'), gr.CheckboxGroup(choices= MODELS)]
 outputs = ['text']
 
 if __name__ == "__main__":

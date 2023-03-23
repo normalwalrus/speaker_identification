@@ -1,5 +1,8 @@
-title = "Speech Recognition ECAPA_TDNN"
+title = "Speech Recognition Task"
 
-desciption = "Please input an audio clip of your favourite Singapore Politician"
+desciption = '''Steps:
+                1.Input an audio clip of your favourite Singapore Politician
+                2.Select which models you would like to use for inference
+                3.Press Submit!'''
 
 select_model_error_message = 'Please Select a model for inference!'

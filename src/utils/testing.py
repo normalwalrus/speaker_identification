@@ -15,7 +15,7 @@ class tester:
 
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     
-    def final_string_construction(self, predicted_list):
+    def final_string_construction(self, predicted_list, expected):
 
         predicted_politician = max(set(predicted_list), key=predicted_list.count)
 
@@ -29,7 +29,11 @@ class tester:
             final_dic[key_list[x]] = value_list[x]
             
         final_dic = dict( sorted(final_dic.items(), key=operator.itemgetter(1),reverse=True))
-        final_string = 'Predicted Politician : '+ str(predicted_politician) + '\n\nConfidence:\n'
+        final_string = ''
+
+        if len(expected) != 0:
+            final_string += 'Expected : ' + expected + '\n'
+        final_string += 'Predicted Politician : '+ str(predicted_politician) + '\n\nConfidence:\n'
 
         for x in final_dic:
             final_string += str(x) + ' : ' + str(round((final_dic[x]/total)*100,2)) +'%\n'
@@ -58,8 +62,8 @@ class tester:
         return predicted
 
     
-    def predict(self, audio_path, models = [], audio_length = 5000):
-
+    def predict(self, expected, audio_path, models = [], audio_length = 5000):
+            
         if len(models) == 0:
             return messages.select_model_error_message
 
@@ -82,6 +86,6 @@ class tester:
                 predicted = self.predict_one_portion(i, params, audio_length)
                 predicted_list.append(predicted)
 
-        final_string = self.final_string_construction(predicted_list)
+        final_string = self.final_string_construction(predicted_list, expected)
 
         return final_string
