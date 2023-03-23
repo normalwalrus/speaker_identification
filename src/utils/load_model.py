@@ -123,7 +123,7 @@ class model_loader:
                 model = xvecExtraction(len(labels), 0.5, 157)
                 plda_model = pickle.load(open(os.getcwd() + os.environ.get('PATH_TO_PLDA'),"rb"))
 
-
+        logger.info(save_path)
         model.load_state_dict(torch.load(save_path))
         model.eval().double()
 

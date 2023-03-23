@@ -8,6 +8,7 @@ from logzero import logger
 from collections import Counter
 import operator
 from logzero import logger
+import os
 
 class tester:
 
@@ -40,7 +41,7 @@ class tester:
 
         logger.info(final_string)
 
-        return final_string, predicted_politician
+        return final_string
     
     def predict_one_portion(self, audio, params, audio_length = 5000):
 
@@ -93,6 +94,6 @@ class tester:
                 predicted = self.predict_one_portion(i, params, audio_length)
                 predicted_list.append(predicted)
 
-        final_string, predicted_politician = self.final_string_construction(predicted_list, expected)
+        final_string = self.final_string_construction(predicted_list, expected)
 
-        return final_string, predicted_politician
+        return final_string
