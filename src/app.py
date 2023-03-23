@@ -2,8 +2,9 @@ import gradio as gr
 from utils.testing import tester
 from typing import Any, List, Optional, Union
 
-inputs = [gr.Audio(source='upload', type='filepath'), gr.CheckboxGroup(choices= ['ECAPA_TDNN', 'CNN'])]
-# inputs: Union[str, gr.inputs.Audio] = gr.inputs.Audio(source='upload', type='filepath')
+MODELS = ['ECAPA_TDNN', 'ECAPA_TDNN_pretrained', 'Wav2Vec2_Embedding', 'CNN']
+
+inputs = [gr.Audio(source='upload', type='filepath'), gr.CheckboxGroup(choices= MODELS)]
 outputs = ['text']
 
 if __name__ == "__main__":

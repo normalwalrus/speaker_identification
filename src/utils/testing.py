@@ -13,50 +13,8 @@ class tester:
     def __init__(self):
 
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-
-    def load_features(self, audio, audio_length):
-
-        DL = dataLoader_extraction(audio)
-
-        DL.rechannel(1)
-        DL.pad_trunc(audio_length)
-        DL.resample(16000)
-
-        features = DL.MFCC_extraction(n_mfcc = 80, mean = False, max_ms=audio_length)
-        features = np.array([features])
-
-        return features
-
-    def predict_one_portion(self, audio, audio_length = 5000):
-
-        features = self.load_features(audio, audio_length)
-
-        features = torch.from_numpy(features).type(torch.double).to(self.device)
-
-        model = model_loader.load_model().to(self.device)
-
-        predicted = torch.argmax(model(features))
-
-        predicted = LABELS[predicted]
-
-        return predicted
-
     
-    def predict(self, audio_path, models = [], audio_length = 5000):
-
-        #y = torchaudio.load(audio_path, normalize = True)
-
-        logger.info(models)
-
-        sp = splitter()
-        split = sp.split_audio_tensor(audio_path)
-
-        predicted_list = []
-
-        for i in split:
-
-            predicted = self.predict_one_portion(i, audio_length)
-            predicted_list.append(predicted)
+    def final_string_construction(self, predicted_list):
 
         predicted_politician = max(set(predicted_list), key=predicted_list.count)
 
@@ -76,4 +34,50 @@ class tester:
             final_string += str(x) + ' : ' + str(round((final_dic[x]/total)*100,2)) +'%\n'
 
         logger.info(final_string)
+
+        return final_string
+    
+    def predict_one_portion(self, audio, params, audio_length = 5000):
+
+        model, datatype, classifier = params
+        ML = model_loader(self.device)
+        
+        logger.info('Feature extraction starting...')
+        features = ML.load_features(audio, audio_length, datatype, classifier)
+
+        logger.info('Feature consversion to tensor...')
+        features = torch.from_numpy(features).type(torch.double).to(self.device)
+
+        logger.info('Model inference starting...')
+        model = model.to(self.device)
+        predicted = torch.argmax(model(features))
+
+        predicted = LABELS[predicted]
+
+        return predicted
+
+    
+    def predict(self, audio_path, models = [], audio_length = 5000):
+
+        predicted_list = []
+
+        for x in models:
+
+            logger.info('Performing inference using ' + x)
+
+            logger.info('Initialising model for ' + x + '...')
+            ML = model_loader(self.device)
+
+            params = ML.load_model(x)
+
+            sp = splitter()
+            split = sp.split_audio_tensor(audio_path)
+
+            for i in split:
+
+                predicted = self.predict_one_portion(i, params, audio_length)
+                predicted_list.append(predicted)
+
+        final_string = self.final_string_construction(predicted_list)
+
         return final_string
