@@ -1,8 +1,9 @@
 import os
 import torch
+import torchaudio
 from dotenv import load_dotenv
 from utils.models.ECAPA_TDNN import ECAPA_TDNN
-from utils.models.neural_net import FeedForwardNN
+from utils.models.neural_net import FeedForwardNN, ConvNN
 from utils.audio_dataloader import dataLoader_extraction
 from utils.models.encoder import Encoder
 import numpy as np
@@ -20,7 +21,9 @@ class model_loader:
     def __init__(self, device) -> None:
         self.device = device
 
-    def load_features(self, audio, audio_length, datatype, classifier):
+    def load_features(self, audio, audio_length, params):
+
+        datatype, classifier, Wav2Vec2 = params
 
         DL = dataLoader_extraction(audio)
 
@@ -39,10 +42,16 @@ class model_loader:
                 features = DL.y[0]
 
         if classifier:
-            logger.info('Encoding using classifier...')
+            logger.info('Encoding using Pretrained ECAPA_TDNN...')
             features = torch.tensor(classifier.encode_batch(features, device = self.device))
             features = features[0][0].type(torch.float64)
             features = features.cpu().numpy()
+
+        if Wav2Vec2:
+            logger.info('Encoding using Wav2Vec2...')
+            features = Wav2Vec2.extract_features(features.type(torch.float))
+            features = features[0][0].type(torch.double)
+            features = features[None,:].detach().numpy()
 
         return features
 
@@ -51,6 +60,7 @@ class model_loader:
         labels = LABELS
         no_speakers = len(labels)
         classifier = None
+        Wav2Vec2 = None
 
         match model:
 
@@ -67,7 +77,15 @@ class model_loader:
                     source="yangwang825/ecapa-tdnn-vox2"
                 ).to(self.device)
 
+            case 'Wav2Vec2_Embedding':
+                save_path = os.getcwd() + os.environ.get('PATH_TO_CNN_Wav2Vec2')
+                datatype = 'Audio'
+                model = ConvNN(len(labels))
+                bundle = torchaudio.pipelines.WAV2VEC2_ASR_BASE_960H
+                Wav2Vec2 = bundle.get_model()
+
+
         model.load_state_dict(torch.load(save_path))
         model.eval().double()
 
-        return model, datatype, classifier
+        return model, datatype, classifier, Wav2Vec2

@@ -1,6 +1,7 @@
 from utils.audio_dataloader import dataLoader_extraction
 from utils.load_model import model_loader, LABELS
 from utils.audio_splitter import splitter
+import utils.messages as messages
 import torch
 import numpy as np
 from logzero import logger
@@ -39,11 +40,11 @@ class tester:
     
     def predict_one_portion(self, audio, params, audio_length = 5000):
 
-        model, datatype, classifier = params
+        model, datatype, classifier, Wav2Vec2 = params
         ML = model_loader(self.device)
         
         logger.info('Feature extraction starting...')
-        features = ML.load_features(audio, audio_length, datatype, classifier)
+        features = ML.load_features(audio, audio_length, [datatype, classifier, Wav2Vec2])
 
         logger.info('Feature consversion to tensor...')
         features = torch.from_numpy(features).type(torch.double).to(self.device)
@@ -58,6 +59,9 @@ class tester:
 
     
     def predict(self, audio_path, models = [], audio_length = 5000):
+
+        if len(models) == 0:
+            return messages.select_model_error_message
 
         predicted_list = []
 

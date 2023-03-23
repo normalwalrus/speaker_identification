@@ -1,6 +1,7 @@
 import gradio as gr
 from utils.testing import tester
 from typing import Any, List, Optional, Union
+import utils.messages as messages
 
 MODELS = ['ECAPA_TDNN', 'ECAPA_TDNN_pretrained', 'Wav2Vec2_Embedding', 'CNN']
 
@@ -15,8 +16,8 @@ if __name__ == "__main__":
         tester_app.predict,
         inputs=inputs,
         outputs=outputs,
-        title="Speech Recognition ECAPA_TDNN",
-        description="Please input an audio clip of your favourite Singapore Politician",
+        title=messages.title,
+        description=messages.desciption,
     ).launch()
     
     
