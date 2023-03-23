@@ -8,7 +8,7 @@ MODELS = ['ECAPA_TDNN', 'ECAPA_TDNN_pretrained', 'Wav2Vec2_Embedding', 'CNN',
 
 AUDIO_LIST = [['Lee Hsien Loong', 'audio/LeeHsienLoong.wav', []],
               ['Josephine Teo', 'audio/JosephineTeo.wav', []],
-              ['Tan Chuan-Jin', 'audio/TanChuanJin.wav', []]]
+              ['Sylvia Lim', 'audio/SylviaLim.wav', []]]
 
 inputs = [gr.Textbox(), gr.Audio(source='upload', type='filepath'), gr.CheckboxGroup(choices= MODELS)]
 outputs = ['text']
