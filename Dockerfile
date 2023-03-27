@@ -1,8 +1,9 @@
 # For more information, please refer to https://aka.ms/vscode-docker-python
-FROM nvidia/cuda:12.1.0-runtime-ubuntu18.04
+FROM pytorch/pytorch:2.0.0-cuda11.7-cudnn8-runtime
 
 # Keeps Python from generating .pyc files in the container
 ENV PYTHONDONTWRITEBYTECODE=1
+
 
 ENV PATH_TO_ECAPA_TDNN="/models/ECAPA_TDNN_v1.0_5sec_80MFCC_30epoch.pt"
 ENV PATH_TO_ECAPA_TDNN_pretrained="/models/ECAPA_TDNN_Pretrained_v1.0_5sec_10epoch.pt"

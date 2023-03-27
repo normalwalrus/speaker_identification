@@ -72,6 +72,8 @@ class tester:
 
     
     def predict(self, expected, audio_path, models = [], audio_length = 5000):
+
+        logger.warning(torch.cuda.is_available())
             
         if len(models) == 0:
             return messages.select_model_error_message
