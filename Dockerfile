@@ -17,6 +17,7 @@ ENV PATH_TO_XvecPLDA="/models/XvecTDNN_vector_extraction.pt"
 ENV PATH_TO_PLDA="/models/plda.pkl"
 ENV PATH_TO_ResNet_DNN='/models/ResNet_FeedForward_v2.pt'
 ENV PATH_TO_All_DNN='/models/All_FeedForward_3_v2.pt'
+ENV PATH_TO_ECAPA_Wav2_DNN='/models/ECAPA_Wav2_FeedForward_3_v2.pt'
 
 # Turns off buffering for easier container logging
 ENV PYTHONUNBUFFERED=1

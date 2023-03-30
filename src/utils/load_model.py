@@ -185,6 +185,12 @@ class model_loader:
                 datatype = 'Embeddings'
                 model = FeedForwardNN(140, len(labels), 0.5)
                 models_classfier = ['ResNet34', 'ResNet50', 'ResNet101', 'CNN', 'ECAPA_TDNN', 'Wav2Vec2_Embedding', 'XvecTDNN']
+            
+            case 'ECAPA_Wav2_DNN_classifier':
+                save_path = os.getcwd() + os.environ.get('PATH_TO_ECAPA_Wav2_DNN')
+                datatype = 'Embeddings'
+                model = FeedForwardNN(40, len(labels), 0.5)
+                models_classfier = ['ECAPA_TDNN', 'Wav2Vec2_Embedding']
 
         logger.info(save_path)
         model.load_state_dict(torch.load(save_path))

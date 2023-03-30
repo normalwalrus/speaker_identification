@@ -5,7 +5,7 @@ import utils.messages as messages
 
 MODELS = ['ECAPA_TDNN', 'ECAPA_TDNN_pretrained', 'Wav2Vec2_Embedding', 'CNN', 
           'ResNet34', 'ResNet50', 'ResNet101', 'XvecTDNN', 'XvecPLDA', 
-          'ResNet_DNN_classifier', 'All_DNN_classifier']
+          'ResNet_DNN_classifier', 'All_DNN_classifier', 'ECAPA_Wav2_DNN_classifier']
 
 AUDIO_LIST = [['Lee Hsien Loong', 'audio/LeeHsienLoong.wav', []],
               ['Josephine Teo', 'audio/JosephineTeo.wav', []],
