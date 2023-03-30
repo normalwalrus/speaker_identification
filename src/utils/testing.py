@@ -1,4 +1,3 @@
-from utils.audio_dataloader import dataLoader_extraction
 from utils.load_model import model_loader, LABELS
 from utils.audio_splitter import splitter
 import utils.messages as messages
@@ -46,30 +45,50 @@ class tester:
     
     def predict_one_portion(self, audio, params, audio_length = 5000):
 
-        model, datatype, classifier, Wav2Vec2, plda = params
+        model, datatype, classifier, Wav2Vec2, plda, models_classifier = params
         ML = model_loader(self.device)
-        
-        logger.info('Feature extraction starting...')
-        features = ML.load_features(audio, audio_length, [datatype, classifier, Wav2Vec2, plda])
 
-        logger.info('Feature consversion to tensor...')
-        features = torch.from_numpy(features).type(torch.double).to(self.device)
-
-        logger.info('Model inference starting...')
         model = model.to(self.device)
 
-        predicted = model(features)
+        if datatype == 'Embeddings':
 
-        if plda:
-            predicted, _ = plda.predict(predicted.cpu().detach().numpy())
-            predicted = torch.from_numpy(np.array(predicted))
+            embeddings_list = torch.tensor([]).to(self.device)
+
+            for x in models_classifier:
+
+                ML = model_loader(self.device)
+                params = ML.load_model(x)
+
+                _, embeddings = self.predict_one_portion(audio, params, audio_length = audio_length)
+
+                logger.info('Embedding stored...')
+                embeddings_list = torch.cat((embeddings_list, embeddings[0]), 0)
+            
+            logger.info('Prediction with Embedding...')
+            logger.warning(embeddings_list)
+            predicted = model(embeddings_list)
+
+        else:
+
+            logger.info('Feature extraction starting...')
+            features = ML.load_features(audio, audio_length, [datatype, classifier, Wav2Vec2, plda])
+
+            logger.info('Feature consversion to tensor...')
+            features = torch.from_numpy(features).type(torch.double).to(self.device)
+
+            logger.info('Model inference starting...')
+            predicted = model(features)
+            embeddings = predicted
+
+            if plda:
+                predicted, _ = plda.predict(predicted.cpu().detach().numpy())
+                predicted = torch.from_numpy(np.array(predicted))
 
         predicted = torch.argmax(predicted)
 
         predicted = LABELS[predicted]
 
-        return predicted
-
+        return predicted, embeddings
     
     def predict(self, expected, audio_path, models = [], audio_length = 5000):
 
@@ -94,7 +113,7 @@ class tester:
 
             for i in split:
 
-                predicted = self.predict_one_portion(i, params, audio_length)
+                predicted, _ = self.predict_one_portion(i, params, audio_length)
                 predicted_list.append(predicted)
 
         final_string = self.final_string_construction(predicted_list, expected)

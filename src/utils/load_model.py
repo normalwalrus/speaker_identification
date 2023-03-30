@@ -69,6 +69,7 @@ class model_loader:
         classifier = None
         Wav2Vec2 = None
         plda_model = None
+        models_classfier = None
 
         match model:
 
@@ -123,8 +124,14 @@ class model_loader:
                 model = xvecExtraction(len(labels), 0.5, 157)
                 plda_model = pickle.load(open(os.getcwd() + os.environ.get('PATH_TO_PLDA'),"rb"))
 
+            case 'ResNet_DNN_classifier':
+                save_path = os.getcwd() + os.environ.get('PATH_TO_ResNet_DNN')
+                datatype = 'Embeddings'
+                model = FeedForwardNN(60, len(labels), 0.5)
+                models_classfier = ['ResNet34', 'ResNet50', 'ResNet101']
+
         logger.info(save_path)
         model.load_state_dict(torch.load(save_path))
         model.eval().double()
 
-        return model, datatype, classifier, Wav2Vec2, plda_model
+        return model, datatype, classifier, Wav2Vec2, plda_model, models_classfier
