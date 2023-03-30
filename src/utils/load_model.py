@@ -21,7 +21,7 @@ load_dotenv()
 
 class model_loader:
 
-    def __init__(self, device) -> None:
+    def __init__(self) -> None:
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
     def load_features(self, audio, audio_length, params):
@@ -129,6 +129,12 @@ class model_loader:
                 datatype = 'Embeddings'
                 model = FeedForwardNN(60, len(labels), 0.5)
                 models_classfier = ['ResNet34', 'ResNet50', 'ResNet101']
+
+            case 'All_DNN_classifier':
+                save_path = os.getcwd() + os.environ.get('PATH_TO_All_DNN')
+                datatype = 'Embeddings'
+                model = FeedForwardNN(140, len(labels), 0.5)
+                models_classfier = ['ResNet34', 'ResNet50', 'ResNet101', 'CNN', 'ECAPA_TDNN', 'Wav2Vec2_Embedding', 'XvecTDNN']
 
         logger.info(save_path)
         model.load_state_dict(torch.load(save_path))

@@ -4,13 +4,16 @@ from typing import Any, List, Optional, Union
 import utils.messages as messages
 
 MODELS = ['ECAPA_TDNN', 'ECAPA_TDNN_pretrained', 'Wav2Vec2_Embedding', 'CNN', 
-          'ResNet34', 'ResNet50', 'ResNet101', 'XvecTDNN', 'XvecPLDA', 'ResNet_DNN_classifier']
+          'ResNet34', 'ResNet50', 'ResNet101', 'XvecTDNN', 'XvecPLDA', 
+          'ResNet_DNN_classifier', 'All_DNN_classifier']
 
 AUDIO_LIST = [['Lee Hsien Loong', 'audio/LeeHsienLoong.wav', []],
               ['Josephine Teo', 'audio/JosephineTeo.wav', []],
               ['Sylvia Lim', 'audio/SylviaLim.wav', []]]
 
-inputs = [gr.Textbox(), gr.Audio(source='upload', type='filepath'), gr.CheckboxGroup(choices= MODELS)]
+inputs = [gr.Textbox(label= 'Expected'), gr.Audio(source='upload', type='filepath', label = 'Audio'),
+        gr.CheckboxGroup(choices= MODELS, label = 'Models')]
+
 outputs = ['text']
 
 if __name__ == "__main__":

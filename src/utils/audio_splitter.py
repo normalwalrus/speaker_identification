@@ -25,8 +25,8 @@ class splitter:
 
         Returns
         ----------
-        split: Array
-            Array of Tensors from the Audio Clip
+            split: List
+                List of Tensors from the Audio Clip
         """
 
         y = librosa.load(path, sr = None, mono = True)
