@@ -21,10 +21,36 @@ load_dotenv()
 
 class model_loader:
 
+    """
+    Class is used to load in models from their .pt files and features from their audio Torch.tensor
+    """
+
     def __init__(self) -> None:
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
     def load_features(self, audio, audio_length, params):
+        """
+        Function to load in the features of the Torch.tensor file that is provided
+
+        Parameters
+        ----------
+            audio : Torch.tensor
+                Tensor that describes the audio provided
+
+            audio_length : Integer
+                Duration of resultant tensors from audio clip in ms
+
+            params: 
+                1. datatype: String describing what datatype is neeed for the model from the audio Tensor
+                2. classifier: model that is used to get embeddings from pretrained model (None if no classifier)
+                3. Wav2Vec2: Wav2Vec2 Model used to get embeddings (None is no Wav2Vec2 Model used)
+                4. List of models: NO USE FOR THIS PARAM
+
+        Returns
+        ----------
+            features: Numpy array
+                Features extracted into Numpy array
+        """
 
         datatype, classifier, Wav2Vec2, _ = params
 
@@ -63,6 +89,30 @@ class model_loader:
         return features
 
     def load_model(self, model : str):
+        """
+        Function to load in the model with the respective pretrained model
+
+        Parameters
+        ----------
+            model : String
+                String of the model to be used for inference
+        Returns
+        ----------
+            model: Torch model
+                Torch model used for inference
+            
+            classifier: Torch Model
+                Any model used for embedding prior to inference by model
+            
+            Wav2Vec2: Torch Model
+                Wav2Vec2 pretrained model used for embedding if needed
+            
+            plda_model: Python Class
+                PLDA model used for inference after the model
+            
+            models_classifier: List of Strings
+                List of models used for the Neural Network inference with embeddings from other models
+        """
 
         labels = LABELS
         no_speakers = len(labels)
