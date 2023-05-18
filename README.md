@@ -15,3 +15,6 @@ This is the Gradio web app used for inference on audio files with models:
     1. Embeddings from all 3 ResNet Models
     2. Embeddings from ECAPA and Wav2Vec2 Models
     3. Embeddings from Most of the models
+
+To start the gradio app, run the app.py file
+- python3 src/app.py
