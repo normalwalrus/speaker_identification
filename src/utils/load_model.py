@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 from utils.models.ECAPA_TDNN import ECAPA_TDNN
 from utils.models.neural_net import FeedForwardNN, ConvNN
 from utils.models.ResNet import ResBottleneckBlock, ResNet, ResBlock
-from utils.audio_dataloader import dataLoader_extraction
+from utils.audio_dataloader import audio_dataLoader
 from utils.models.encoder import Encoder
 from utils.models.xvector import xvecTDNN, xvecExtraction
 import numpy as np
@@ -54,7 +54,7 @@ class model_loader:
 
         datatype, classifier, Wav2Vec2, _ = params
 
-        DL = dataLoader_extraction(audio)
+        DL = audio_dataLoader(audio)
 
         DL.rechannel(1)
         DL.pad_trunc(int(audio_length))

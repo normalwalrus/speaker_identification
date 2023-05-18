@@ -58,7 +58,7 @@ class tester:
         
         if len(expected) != 0:
             final_string += 'Expected : ' + expected + '\n'
-        final_string += 'Predicted Politician : '+ str(predicted_politician) + '\n\nConfidence:\n'
+        final_string += 'Predicted Politician : '+ str(predicted_politician) + '\n\nPrediction:\n'
 
         for x in final_dic:
             final_string += str(x) + ' : ' + str(round((final_dic[x]/total)*100,2)) +'%\n'
